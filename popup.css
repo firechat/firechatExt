@@ -1,0 +1,69 @@
+body
+{
+	width: 410px;
+    height: 300px;
+    font-family: arial;
+    font-size: 10pt;
+}
+
+#data {
+    display: none;
+}
+
+#main_img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center ;
+}
+
+#firstScreen {
+    padding-top: 20px;
+}
+
+#mainOutput {
+    padding-bottom: 25px;
+}
+
+#dateform {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    color: white;
+}
+
+#main_text {
+    word-wrap: break-word;
+    width: 400px;
+	font-size: 12pt;
+    font-family: arial;
+}
+
+.fade {
+    -webkit-animation:demo 2s;
+}
+
+@-webkit-keyframes demo {
+   0% {opacity:0;}
+   100% {opacity:1;}
+}
+
+#messageInput {
+    position: absolute;
+    bottom: 2%;
+    width: 96%;
+}
+
+#currentSite {
+    position: absolute;
+    top: 1%;
+    font-size: 10pt;
+    font-family: arial;
+}
+
+#time {
+    font-size: 8pt;
+    position: absolute;
+    top: inherit;
+    right: 2%;
+}
