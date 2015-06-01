@@ -13,10 +13,8 @@
     "background": {
         "page": "background.html"
     },
-    "permissions":[
-        "https://accounts.google.com/o/oauth2/token",
-	    "storage",
-		"tabs"
+    "permissions": [
+    "tabs","*://*/*"
     ],
     "content_scripts": [
         {

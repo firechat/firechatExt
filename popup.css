@@ -67,3 +67,10 @@ body
     top: inherit;
     right: 2%;
 }
+
+#mainOutput
+{
+    position: absolute;
+    top: 20%;
+
+}

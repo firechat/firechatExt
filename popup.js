@@ -8,37 +8,80 @@
       var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
   })();
 
-var googleAuth = new OAuth2('google', {
-  client_id: '17755888930840',
-  client_secret: 'b4a5741bd3d6de6ac591c7b0e279c9f',
-  api_scope: 'https://www.googleapis.com/auth/tasks'
-});
-
-// Get a reference to the root of the chat data.
-var messagesRef = new Firebase('https://firechatext.firebaseIO.com/');
 var tablink;
 var uname = localStorage['_firechat_uname'] === undefined ? null : localStorage['_firechat_uname'];
 
+var tabUrl = "";
+
+function getTabUrl() {
+  chrome.tabs.query({'active': true, 'windowId': chrome.windows.WINDOW_ID_CURRENT}, function(arrayOfTabs) {
+     // since only one tab should be active and in the current window at once
+     // the return variable should only have one entry
+     $("#url").html(arrayOfTabs[0].url);
+  });
+}
+
+function loadMsgHistory(){
+
+    chrome.tabs.query({'active': true, 'windowId': chrome.windows.WINDOW_ID_CURRENT}, function(arrayOfTabs) {
+     // since only one tab should be active and in the current window at once
+     // the return variable should only have one entry
+      tabUrl = arrayOfTabs[0].url;
+
+      var xmlhttp = new XMLHttpRequest();
+      xmlhttp.onreadystatechange=function()
+      {
+      if (xmlhttp.readyState==4 && xmlhttp.status==200)
+       {
+          var json = JSON.parse(JSON.parse(xmlhttp.responseText));
+          var htmls = "";
+          for(var i=0; i<json.length; i++) {
+             htmls += "<b>"+ json[i]["username"]+"@"+json[i]["time"]+":&nbsp"+"</b><i>"+json[i]["message"]+"</i><br/>";
+          }
+          debugger;
+          $("#messagesDiv").html(htmls);
+        }
+      }
+
+      var apiCall = "http://52.10.208.122/firechat/api/values?&url=" + tabUrl;
+      xmlhttp.open("GET", apiCall,true);
+      xmlhttp.send();
+  });
+}
+
 $(function() {
+    getTabUrl();
+    loadMsgHistory();
     if (uname == null) {
         $("#messageInput").hide();
         $("#mainOutput").hide();
+        $("messageInput").hide();
     } else {
         $('#nameInput').hide();
         $('#firstScreen').hide();
     }
 });
 
-// When the user presses enter on the message input, write the message to firebase.
-$('#messageInput').keypress(function (e) {
+// When the user presses enter on the message input, write the message to firechat api.
+$('#messageBox').keypress(function (e) {
     if (e.keyCode != 13)
         return;
 
-    if (uname != null) {
-        var text = $('#messageInput').val().slice(0, 35);
-        messagesRef.push({ name: uname, text: text, url: tablink, date: new Date().toJSON().replace("T", " ") });
-        $('#messageInput').val('');
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange=function()
+    {
+    if (xmlhttp.readyState==4 && xmlhttp.status==200)
+      {
+        loadMsgHistory();
+        $("#messageBox").val("");
+      }
     }
+
+    var msg = $("#messageBox").val();
+    var url = $("#url").html();
+    var apiCall = "http://52.10.208.122/firechat/api/values?&user=" + uname + "&msg=" + msg + "&url=" + url;
+    xmlhttp.open("GET", apiCall,true);
+    xmlhttp.send();
 });
 
 
@@ -50,7 +93,7 @@ $('#nameInput').keypress(function(e) {
     uname = $('#nameInput').val();
     if (uname.length) {
         $("#mainOutput").show();
-        $("#messageInput").show();
+        $("#messageBox").show();
         $('#nameInput').hide();
         $('#firstScreen').hide();
         localStorage['_firechat_uname'] = uname;
@@ -58,21 +101,3 @@ $('#nameInput').keypress(function(e) {
         uname = null;
     }
 });
-
-// Add a callback that is triggered for each chat message.
-messagesRef.limit(10).on('child_added', function (snapshot) {
-    var message = snapshot.val();
-    if (message.url === tablink) {
-        var msg = $('#messagesDiv').html();
-        msg += "<span><br/>" + message.name + ": " + message.text + "</span><span id='time'>" + message.date.slice(0,16)+ "</span>";
-        $('#messagesDiv').html(msg);
-        $('#messagesDiv')[0].scrollTop = $('#messagesDiv')[0].scrollHeight;
-    }
-});
-
-chrome.tabs.getSelected(null, function (tab) {
-    tablink = tab.url;
-    tablink = tablink.slice(0, 50) + "..";
-    $("#url").html(tablink);
-});
-

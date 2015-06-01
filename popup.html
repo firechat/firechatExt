@@ -1,11 +1,9 @@
 <html>
 <head>
     <link rel="stylesheet" type="text/css" href="popup.css" />
-    <script src='./firebase.js'></script>
     <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
     <script src="./jquery-1.9.1.js"></script>
     <script src="./jquery-ui.js"></script>
-    <script src="/oauth2/oauth2.js"></script>
 </head>
     <body>
         <div id="firstScreen">
@@ -18,11 +16,13 @@
             <div id='messagesDiv'></div>
         </div>
         <br/>
-        <div id=mainInput>
+        <div id="mainInput">
             <input type='text' id='nameInput' placeholder='Enter a new username!'>
-            <input type='text' id='messageInput' placeholder='Message...'>
-            <div id="currentSite">Current Site: <span id='url'></span></div>
+            <div id="currentSite"><b>Current Site: </b><span id="url"></span></div>
         </div> 
+        <div id="messageInput">
+            <input type='text' id='messageBox' placeholder='Message...'>
+        </div>
         
     </body>
 <script src="jquery-1.9.1.js"></script>
