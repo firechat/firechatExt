@@ -55,8 +55,10 @@ $(function() {
     if (uname == null) {
         $("#messageInput").hide();
         $("#mainOutput").hide();
-        $("messageInput").hide();
+        $("#messageInput").hide();
+        $("#currentSite").hide();
     } else {
+        $("#currentSite").show();
         $('#nameInput').hide();
         $('#firstScreen').hide();
     }
@@ -90,12 +92,14 @@ $('#nameInput').keypress(function(e) {
     if (e.keyCode != 13)
         return;
 
-    uname = $('#nameInput').val();
+    uname = $('#nameInput').val().substring(0,22);
     if (uname.length) {
         $("#mainOutput").show();
         $("#messageBox").show();
         $('#nameInput').hide();
         $('#firstScreen').hide();
+        $("#currentSite").show();
+        $("#messageInput").show();
         localStorage['_firechat_uname'] = uname;
     } else {
         uname = null;

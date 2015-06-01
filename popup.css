@@ -25,6 +25,15 @@ body
     padding-bottom: 25px;
 }
 
+#mainInput input{
+    width: 60%;
+}
+
+#messageInput input
+{
+    width: 98%;
+}
+
 #dateform {
     display: block;
     margin-left: auto;
