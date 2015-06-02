@@ -52,6 +52,8 @@ function loadMsgHistory(){
 $(function() {
     getTabUrl();
     loadMsgHistory();
+    setInterval(function () {loadMsgHistory()}, 10000);
+
     if (uname == null) {
         $("#messageInput").hide();
         $("#mainOutput").hide();
